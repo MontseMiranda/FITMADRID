@@ -1,0 +1,276 @@
+---
+title: <br><br><center>VISIT MADRID<center>
+author: "CUTTING EDGE EVENTS"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+---
+
+<script> 
+    $(document).ready(function() { 
+    $head = $('#header'); 
+    $head.prepend('<A href = https://www.cuttingedge-events.com><img src ="LOGO.png" width="150" vspace="50" align="right"></A>') 
+    }); 
+</script> 
+
+```{r knitr_init, echo=FALSE, cache=FALSE, message= FALSE,warning=FALSE}
+library(knitr)
+library(rmdformats)
+
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=FALSE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=750)
+```
+
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+library(readxl)
+library(shiny)
+library(dplyr)
+library(knitr)
+```
+
+## Accommodation
+
+### _**Main Hotel: CATALONIA PUERTA DEL SOL**_
+
+
+**Catalonia Puerta del Sol** is set in a magnificent 18th-century building in the historic centre of Madrid. It offers free Wi-Fi throughout the hotel.
+
+The hotel is just 50 m from Puerta del Sol, Madrid's main square and from main tapas restaurants. You can walk to Madrid's famous Art Triangle in 15 minutes. Atocha Train Station is 1 km away.
+
+The air-conditioned rooms feature parquet floors and smart décor. Each one has flat-screen satellite TV, a private bathroom and a minibar.
+
+The **Puerta del Sol's** restaurant serves a buffet breakfast each morning, and available until 12:00 at weekends. There is also a bar with a roofed terrace, El Patio, where you can get a snack or a drink.
+
+<img src = "https://t-ec.bstatic.com/images/hotel/max1024x768/159/159740603.jpg" width="340"> <img src = "https://t-ec.bstatic.com/images/hotel/max1024x768/159/159740585.jpg" width="385" align="right">
+
+<img src = "https://t-ec.bstatic.com/images/hotel/max1024x768/159/159813536.jpg"> 
+
+
+
+
+## Programme
+
+### **Programme Overview and timeline**
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+library(timevis)
+library(dplyr)
+library(readxl)
+
+timeline <- read_excel("timeline.xlsx", sheet = "Sheet1", 
+    col_types = c("date", 
+        "text", "text", "numeric", "text", 
+        "text"))
+
+data <- data.frame( id = 1:length(timeline$start),
+                    start = as.POSIXlt(timeline$start),
+                    content = timeline$content,
+                    group = timeline$group,
+                    type = "box",
+                    style = "background-color:#FF9933;")
+
+groups = data.frame(id = 1:4, content = c("Morning", "Lunch", "Afternoon", "Diner"))
+
+tl <- timevis(data, groups, showZoom = TRUE, zoomFactor = 0.2, fit = TRUE, width = '100%', height = 300)
+
+tl %>% setOptions(list(orientation = "top", align = "left"))
+
+```
+
+### **Map**
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+library(leaflet)
+library(stringr)
+library(ggmap)
+library(readxl)
+library(dplyr)
+library(leaflet.extras)
+library(shiny)
+
+coordinates <- read_excel("timeline.xlsx", 
+    sheet = "Sheet3", col_types = c("text", 
+        "text", "numeric", "numeric", "text", 
+        "text"))
+
+coordinates$Category <- factor(coordinates$Category)
+
+m <- coordinates %>% 
+  leaflet(options = leafletOptions(dragging = TRUE,
+  minZoom = 14, maxZoom = 18)) %>% 
+  addProviderTiles("Esri") %>% 
+  setView(lng = 2.1687300, lat = 41.3863900, zoom = 14) 
+
+pal <- colorFactor(palette = c("red","blue"),
+      levels = coordinates$Category)
+
+m %>% clearBounds() %>% 
+  addCircleMarkers(radius = 5, color = ~pal(Category)) %>% 
+  addPopups(popup = paste0("<b>",coordinates$Location,"</b>")) %>% 
+  addLegend(position = "bottomright", pal = pal, 
+  values = coordinates$Category) %>% addResetMapButton()
+
+```
+
+### **RESTAURANTS** {.tabset .tabset-fade .tabset-pills}
+
+#### **Cerveceria Alemana**
+
+* **Cuisine** Tapas 
+* **Capacity** 2 floors: Ground floor is a bar, standing tapas and first fllor 
+* **Location** City centre
+
+In 1904 begins the adventure of one of the most iconic breweries of Madrid, the German brewery in Plaza Santa Ana **“La Cervecería Alemana”**.
+
+And so began **La Alemana** and thus continues until today, with the same spirit in every corner of its rooms. Always offering high quality products to their customers. It is one of the most iconic breweries Madrid.
+
+The main innovation of our kitchen is to provide the highest quality in their lifelong recipes: crispy tuna turnovers (pasties), tasty tempura cod, foolproof squid, delicious croquettes, Iberian ham and cold meats and of course, the incredible and real German sausages.
+
+<img src = "https://i.pinimg.com/originals/10/87/38/108738ea6c5d7ef604984b843989974b.jpg">
+
+
+#### **Restaurant Los Galayos**
+
+* **Cuisine** Spanish 
+* **Capacity** 5 private rooms and terrace. Private rooms up to 80 pax 
+* **Location** City centre
+
+The Restaurant Los Galayos is located in *La Plaza Mayor* in the *Austrias Neighbourhood*. Los Galayos has seen pass away the time; if the walls speak they would explain how was Madrid more than one hundred years ago, in the ages when La Puerta del Sol and La Plaza Mayor were the centre of gatherings and kingdom´s special Ceremonies. Los galayos has different dinning rooms, every dinning room has it own special environment and they have been decorated to offer all possible new sensations for visitors to taste a great typical traditional Spanish cuisine.
+
+The Spanish cuisine that they offer now is more elaborated, due to the interest of the proprietors in the investigation of the new current kitchen offering a wide variety inside its menu.
+
+<img src = "http://blog.losgalayos.net/wp-content/uploads/2013/12/Salon-Duque2.jpg?w=640" width="720">
+
+
+#### **LaMucca del Prado**
+
+* **Cuisine** Tapas and italian cuisine
+* **Capacity** 2 floors: 1 large ground floor up to 120 people. Cozy basement up to 30 pax, special for private dinners.  
+* **Location** City centre
+
+The quirk of the two **Lamucca restaurants** is their slogan: "Eat well and take the furniture with you". And, it turns out that everything here is for sale, even the furniture.
+
+The atmosphere is **modern and informal**, with a menu of simple, traditional but exquisite tapas: veal carpaccio, chicken curry, La Mucca veal or vegetarian hamburger, grilled white fish of the day, pasta with grilled vegetables, spaghetti with spicy meat, tomato and parmesan and a wide range of traditional and "gourmet" pizzas.
+
+<img src = "https://www.esmadrid.com/sites/default/files/styles/content_type_full/public/recursosturisticos/restaurantes/mu3_1424080721.707.jpg?itok=QcUqXOF-">
+
+
+
+#### **La Bodega de los secretos**
+
+* **Cuisine** Spanish 
+* **Capacity** 50 pax 
+* **Location** City centre
+
+Located in a **wine cellar** consisting of various 17th century alcoves (the oldest in the centre of Madrid), this restaurant in the Literary Quarter offers a culinary proposal based on Mediterranean cuisine with avant-garde touches.
+
+Following extensive refurbishments, the restaurant consists of **various “semi-VIP areas”** with tables, so as to be able to enjoy a cosy lunch or dinner. The establishment also has a larger dining room for celebrations with a capacity of up to 50 diners.  The walls are of exposed brick and the designer furniture has been made to measure or comes from diverse markets.  
+
+The menu consists of revamped Mediterranean dishes, prepared with high quality products.  The wine list includes wines from all of the Spanish designations.
+
+<img src = "https://www.esmadrid.com/sites/default/files/styles/content_type_full/public/recursosturisticos/restaurantes/bodega_secretos_1396957861.053.jpg?itok=luJgIpdt">
+
+
+### **TOURS** {.tabset .tabset-fade .tabset-pills}
+
+All suggested tours will be privated and in exclusivity for the guests. 
+
+
+#### **MADRID CITY TOUR & ROYAL PALACE**
+
+* **Duration:** 3,5 hours
+* **Location:** Madrid center
+* **Included:** 1 English speaking guide, entrance tickets to Royal Palace and whispers.
+
+Immerse yourself in Madrid's history as you explore the city's most important sites and Royal Palace. Get the story behind the city's architectural history, following its evolution from "Moorish Madrid" into the Habsburg and Bourbon periods. Then visit the Spanish Royal Palace (Palacio Real), seeing the royal collections and admiring its Baroque details. Finish your day at Madrid Rio, the city's newest public park. This Madrid sightseeing tour includes all entrance fees
+
+
+<img src = "https://s-ec.bstatic.com/images/hotel/max1024x768/141/141137639.jpg">
+
+#### **MADRID CITY CENTER**
+
+* **Duration:** 3,5H hours
+* **Location:** Madrid center
+* **Included:** 1 English speaking guide, stop for a drink in San Miguel Market 
+
+In this three-hour tour you will discover the most important monuments and places of the city center, unhurried and at your own pace. We will start in the main central point of Puerta del Sol, from there we will discover some of the oldest and most impressive places like Plaza Mayor, the San Miguel Market, the Almudena Cathedral or the Royal Palace.
+
+<img src = "https://upload.wikimedia.org/wikipedia/commons/4/44/Plaza_Mayor_de_Madrid_06.jpg">
+
+
+#### **PRADO MUSEUM & RETIRO PARK **
+
+* **Duration:** 3,5H hours
+* **Location:** Madrid center
+* **Included:** 1 English speaking guide, entrance ticket to Prado Museum 
+
+Avoid the crowds as you skip the line and get the inside scoop on some of the best art at Madrid’s iconic Prado museum on this 90-minute guided tour. This sprawling museum is nearly unparalleled in its collection of European art, but can also be overwhelming for new visitors. Let your guide introduce you to museum’s the top highlights and their fascinating backstories, including Diego Velazquez’s ‘Las Meninas’ and ‘The Annunciation’ by El Greco. Best of all, this small-group visit is limited to just 20 guests, ensuring a personalized experience. 
+
+After the Prado Visit we will walk to Retiro park, the most emblematic of the city. 
+
+<img src = "https://www.spaneasylearning.com/wp-content/uploads/2018/06/retiro-park-madrid.jpg">
+
+
+END OF THE PROGRAMME
+
+*****
+
+## Budget
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(readxl)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+budget <- read_excel("timeline.xlsx", sheet = "Sheet2", 
+    col_types = c("date", "text", "text", 
+        "numeric", "text", "numeric", "numeric"))
+budget$DATE <- as.Date(budget$DATE) %>% format("%b/%d")
+
+
+table <- budget[,c(1,3:7)] 
+table$Total <- paste('€',formatC(table$Total, big.mark=',', format = NULL ))
+table$withVAT <- paste('€',formatC(table$withVAT, big.mark=',', format = NULL ))
+table <- sapply(table,as.character)
+table[is.na(table)] <- " "
+
+
+table %>%  
+  kable() %>% kable_styling(bootstrap_options = c("striped","condensed","responsive"),font_size = 10, fixed_thead = list(enabled=T, background="#EF8319")) %>% column_spec(6, 
+bold = T, width = "2cm") %>% 
+  row_spec(nrow(table), bold = T, color = "black", background ="#EF8319")
+
+
+```
+
+## Terms & Conditions
+
+  * Rates valid for 2019.
+  
+  * 10% Commissionable rates for Better Travel 
+  
+  * Fit trip for 2 pax.
+  
+  * Cutting Edge Events management fee including in the detailed rates
+  
+  * VAT included. 
+  
+  * No reservation has been done. Availability upon request.
+  
+*****
+
+
+
